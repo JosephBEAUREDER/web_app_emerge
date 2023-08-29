@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Ma todo list</h1>
+
+<div class="row">
+    <div class="col">
+        <div id="addItem" class="m-4">
+            <form>
+                <fieldset>
+                <legend>Ajouter un nouvel item</legend>
+                <div class="form-group row m-2">
+                    <label for="addItemTitre" class="col-sm-2 col-form-label">Titre</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="addItemTitre">
+                    </div>
+                </div>
+                <div class="form-group row m-2">
+                    <label for="addItemTexte" class="col-sm-2 col-form-label">Texte</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="addItemTexte" rows="3"></textarea>
+                    </div>
+                </div>
+                </fieldset>
+                <center><button type="button" class="btn btn-success m-2" style="margin:auto" onclick="addItem()">Enregistrer !</button></center>
+            </form>
+        </div>
+    </div>
+    <div class="col">
+
+<button type="button" class="btn btn-primary" onclick="getItems()">Lister les items</button>
+
+<div id="items"></div>
+
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'scripts/todolist.js' %}"></script>
+
+{% endblock %}

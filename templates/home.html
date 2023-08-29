@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Bienvenue !</h1>
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+      <h4 class="card-title" id="editableTitle" contentEditable>Primary card title</h4>
+      <button id="saveButton">Save</button>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+</div>
+
+<div class="d-flex">
+    <textarea id="inText" cols="40"></textarea>
+    <button type="button" class="btn btn-primary" onclick="sendText()">Analyser !</button>
+</div>
+<div id="outText"></div>
+
+
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'scripts/home.js' %}"></script>
+{% endblock %}
