@@ -16,16 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from myApp import views as myApp
-from django.views.decorators.csrf import csrf_exempt
+from register import views as v
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', myApp.home),
-    path('save_text/', csrf_exempt(myApp.save_text)),
-    path('todolist/', myApp.todolist),
-    path('todolist/list', csrf_exempt(myApp.listItems)),
-    path('todolist/create_item/', csrf_exempt(myApp.create_item)),
-    path('todolist/del', csrf_exempt(myApp.delItem)),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('', include('myApp.urls')),
+    path('register/', v.register, name="register"),
+    path('', include("django.contrib.auth.urls")),
+
 ]

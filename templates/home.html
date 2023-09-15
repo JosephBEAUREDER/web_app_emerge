@@ -4,19 +4,33 @@
 {% block content %}
 <h1>Bienvenue !</h1>
 <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
-    <div class="card-header">Header</div>
-    <div class="card-body">
+  <div class="card-body">
       <h4 class="card-title" id="editableTitle" contentEditable>Primary card title</h4>
-      <button id="saveButton">Save</button>
       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
+
+      <!-- Use a row to create a horizontal layout -->
+      <div class="row">
+          <!-- Make the textarea wider using col-md-12 -->
+          <div class="col-md-12">
+              <textarea id="inText" class="form-control" rows="3"></textarea>
+          </div>
+      </div>
+      <div class="row">
+          <div class="text-end mt-2 ml-6">
+              <button name="save" id="send_item" onclick="sendText()" class="btn btn-success">Create</button>
+          </div>
+      </div>
+  </div>
 </div>
 
-<div class="d-flex">
+<!-- <div class="d-flex">
     <textarea id="inText" cols="40"></textarea>
     <button type="button" class="btn btn-primary" onclick="sendText()">Analyser !</button>
-</div>
-<div id="outText"></div>
+</div> 
+<div id="outText"></div> -->
+
+
+
 
 
 {% endblock %}

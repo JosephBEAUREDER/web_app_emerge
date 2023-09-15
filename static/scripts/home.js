@@ -1,11 +1,13 @@
 async function sendText() {
     // ON RÉCUPÈRE LES VARIABLES À ENVOYER AU SERVEUR
+    var title = document.getElementById('editableTitle').textContent;
     var inText = document.getElementById('inText').value;
-    
+
     // ON EMBALLE NOTRE VARIABLE DANS UN DICTIONNAIRE
     // ON PEUT ENVOYER AUTANT DE VARIABLES QU'ON VEUT, ICI ON SE CONTENTE D'ENVOYER inText
     var colis = {
-        inText: inText
+        titre: title,
+        texte: inText
     }
     console.log('Envoi colis:',colis);
 
@@ -20,9 +22,12 @@ async function sendText() {
     
     // ENVOI ET RÉCUPÉRATION DE LA RÉPONSE
     const response = await fetch('/save_text/', requete)
-    // const data = await response.json();
-    // alert(data.reponse);
+    const data = await response.json();
+    alert(data.reponse);
 }
+
+
+
 
 
 const editableTitle = document.getElementById('editableTitle');
@@ -54,6 +59,9 @@ function saveTitle() {
     localStorage.setItem('savedTitle', newTitle); // Save content to localStorage
     console.log('New title:', newTitle);
 }
+
+
+
 
 
 
