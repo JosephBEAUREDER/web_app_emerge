@@ -1,0 +1,31 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>how to save input when click outside of it in jquery</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+		<form method="post" action="" >
+            <input type="text" id="test" value="123">
+            <input type="submit">
+         </form>
+    </body>
+        
+		<script>
+        	$(function () {
+  $('#test').blur(function (e) {
+    e.preventDefault();
+    var x = document.getElementById("test").value;
+    var saveData = $.ajax({
+      type: 'POST',
+      url: "someaction.do?action=saveData",
+      data: {input: x},
+      dataType: "text",
+      success: function(resultData) { alert("Save Complete") }
+    });
+  });
+});
+    	</script>
+
+</html> 
