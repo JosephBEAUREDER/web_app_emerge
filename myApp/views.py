@@ -5,7 +5,14 @@ from .models import Project, Insight, Item
 from django.views.decorators.csrf import csrf_exempt
 import os
 from django.conf import settings
-from django.contrib.auth.forms import UserCreationForm  
+from django.contrib.auth.forms import UserCreationForm 
+from bardapi import Bard
+import os
+import random
+
+os.environ['_BARD_API_KEY'] = 'bQjTqbzcKVklVwwhxLJxYKSnOauhKWFzMzZTMOL0P279BK3ygFLr2fg_716QP1SuYt8CuA.'
+
+
 
 def home(request):
     if request.user.is_authenticated:
@@ -15,11 +22,8 @@ def home(request):
         # Pass the projects to the template context
         context = {"projects": projects}
         return render(request, "home.html", context)
-    else:
-        # Handle cases where the user is not authenticated
-        return render(request, "not_authenticated.html")  # Create a template for this case if needed
     
-    # return render(request, 'home.html')
+    return render(request, 'home.html')
 
 
 def create_new_project(request):
@@ -31,23 +35,48 @@ def create_new_project(request):
 
 
 def save_text(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            titre = data.get('titre')
-            texte = data.get('texte')
-            
-            project = Project.objects.create(name=titre, user=request.user)
-            Insight.objects.create(project=project, text=texte, swag=0)
-            
-            response_data = {
-                "message": "Item created successfully",
-            }
-            return JsonResponse(response_data)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=400)
-    else:
-        return JsonResponse({"message": "Invalid request method"})
+
+    colis = json.loads(request.body)
+    project_id = colis["projectId"]
+    content = colis["textContent"]
+
+    try:
+        # Create a new Insight object
+        insight = Insight.objects.create(project_id=project_id, text=content)
+
+        # Retrieve all insights for the project
+        insights = Insight.objects.filter(project_id=project_id).values()
+
+        # Return a success response
+        return JsonResponse({"insights": list(insights)})
+    except Exception as e:
+        # Handle any exceptions or errors
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+
+def show_insight(request):
+    colis = json.loads(request.body)
+    project_id = colis["projectId"]
+
+
+    # Get all the Insights related to the project
+    insights = Insight.objects.filter(project_id=project_id).values()
+    insight_texts = [insight['text'] for insight in insights]
+
+    # Pick a random from the list of these Insights
+    random_text = random.choice(insight_texts)
+
+    # Create a pre-prompt
+    pre_prompt = "Tell me a very short insight about this text, 2 sentences maximum : "
+
+    response = (Bard().get_answer(pre_prompt + random_text)['content'])
+
+    return JsonResponse({"response": response})
+
+
+
+
 
 
 def del_project(request):

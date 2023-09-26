@@ -1,11 +1,17 @@
-async function saveText() {
+showProjects();
 
-    var title = document.getElementById('editableTitle').textContent;
-    var inText = document.getElementById('inText').value;
+
+
+async function saveText(projectId) {
+
+    const textarea = document.getElementById(`inText${projectId}`);
+    const textContent = textarea.value;
+
+    alert(textContent)
 
     var colis = {
-        titre: title,
-        texte: inText
+        projectId : projectId,
+        textContent: textContent
     }
     const requete = {
         method: 'POST',
@@ -15,10 +21,41 @@ async function saveText() {
         body: JSON.stringify(colis)
     };
     const response = await fetch('/save_text/', requete)
-    const data = await response.json();
+    if (response.ok) {
+        const data = await response.json();
+        const insights = data.insights; // Get the list of insights from the response
+
+        console.log(insights);
+        } else {
+        console.error('Failed to save text.');
+    }
 }
 
 
+async function showInsight(projectId) {
+
+    var colis = {
+        projectId : projectId
+}
+    const requete = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(colis)
+    };
+
+    const response = await fetch('/show_insight/', requete)
+
+    const data = await response.json();
+
+    alert(data.response);
+}
+
+
+
+
+    
 async function createNewProject() {
     const requete = { 
         method: 'POST',
@@ -33,8 +70,6 @@ async function createNewProject() {
     showProjects();
 
   }
-
-
 
 
 async function showProjects() {
@@ -71,7 +106,7 @@ async function showProjects() {
                                 </svg>
                             </button>
                         </div>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">Some quick CO text to build on the card title and make up the bulk of the card's content.</p>
                         <div class="row">
                             <div class="col-md-12">
                                 <textarea id="inText${project.id}" class="form-control" rows="3"></textarea>
@@ -79,7 +114,8 @@ async function showProjects() {
                         </div>
                         <div class="row">
                             <div class="text-end mt-2 ml-6">
-                                <button name="save" id="send_item${project.id}" onclick="saveText()" class="btn btn-success">Add content</button>
+                                <button name="show" id="show_insight${project.id}" onclick="showInsight('${project.id}')" class="btn btn-secondary">Show Insight</button>
+                                <button name="save" id="send_item${project.id}" onclick="saveText('${project.id}')" class="btn btn-success">Add content</button>
                             </div>
                         </div>
                     </div>
@@ -133,10 +169,6 @@ async function showProjects() {
     const projectId = event.target.getAttribute('data-projectId');
       const newName = event.target.textContent;
 
-      alert(newName)
-      alert(projectId)
-
-      // Send an AJAX request to update the project name
     try {
         const response = await fetch('/update_project_name', {
           method: 'POST',
