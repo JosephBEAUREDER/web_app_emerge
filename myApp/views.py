@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm 
-from bardapi import Bard
+from bardapi import Bard, max_token, max_sentence
 import os
 import random
 
@@ -68,9 +68,10 @@ def show_insight(request):
     random_text = random.choice(insight_texts)
 
     # Create a pre-prompt
-    pre_prompt = "Tell me a very short insight about this text, 2 sentences maximum : "
+    pre_prompt = "Tell me only 2 sentences about this text : "
 
-    response = (Bard().get_answer(pre_prompt + random_text)['content'])
+    # create a response that is only 2 sentences long
+    response = max_sentence(Bard().get_answer('')['content'], 2)
 
     return JsonResponse({"response": response})
 
@@ -192,4 +193,3 @@ def register(response):
     form = UserCreationForm
 
     return render(response, "register/register.htlm", {form})
-

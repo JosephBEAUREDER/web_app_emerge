@@ -1,1 +1,9 @@
 db.sqlite3
+
+# Virtual environment
+venv/
+.env
+
+# Python cache files
+__pycache__/
+*.pyc

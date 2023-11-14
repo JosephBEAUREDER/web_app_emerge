@@ -11,4 +11,4 @@ text = "Tell me someting"
 
 # print((Bard().get_answer(text_text)['content'], 1))
 
-print(max_sentence(Bard().get_answer("Les sociétés et l'Etat")['content'], 1))
+# print(max_sentence(Bard().get_answer("Les sociétés et l'Etat")['content'], 1))

@@ -1,7 +1,5 @@
 showProjects();
 
-
-
 async function saveText(projectId) {
 
     const textarea = document.getElementById(`inText${projectId}`);
@@ -92,13 +90,17 @@ async function showProjects() {
     var rowDiv = document.createElement('div');
     rowDiv.className = 'row align-items-center';
 
+
+
+    
+
     data['projects'].forEach((project, index) => {
         const cardHTML = `
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
                     <div class="card-body" id="${project.id}">
                         <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title" id="editableTitle{{ project.id }}" contentEditable data-projectId="{{ project.id }}"> ${ project.name }</h4>
+                        <h4 class="card-title" id="editableTitle${project.id}" contentEditable data-projectId="${project.id}"> ${ project.name }</h4>
                         <button type="button" class="btn btn-danger" onclick="delProject('${project.id}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -140,7 +142,34 @@ async function showProjects() {
     `;
     rowDiv.innerHTML += buttonHTML;
     projectsDiv.appendChild(rowDiv);
+
+    document.querySelectorAll('[contentEditable]').forEach(contentEditableElement => {
+        contentEditableElement.addEventListener('blur', async (event) => {
+        const projectId = event.target.getAttribute('data-projectId');
+        const newName = event.target.textContent;
+
+        alert(projectId)
+        alert(newName)
     
+        try {
+            const response = await fetch('/update_project_name', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id: projectId, name: newName }),
+            });
+      
+            if (response.ok) {
+              console.log('Project name updated successfully.');
+            } else {
+              console.error('Failed to update project name.');
+            }
+          } catch (error) {
+            console.error('Error updating project name:', error);
+          }
+         });
+      });  
 }
 
 
@@ -162,32 +191,6 @@ async function showProjects() {
     
     showProjects();
   }
-
-
-  document.querySelectorAll('[contentEditable]').forEach(contentEditableElement => {
-    contentEditableElement.addEventListener('blur', async (event) => {
-    const projectId = event.target.getAttribute('data-projectId');
-      const newName = event.target.textContent;
-
-    try {
-        const response = await fetch('/update_project_name', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id: projectId, name: newName }),
-        });
-  
-        if (response.ok) {
-          console.log('Project name updated successfully.');
-        } else {
-          console.error('Failed to update project name.');
-        }
-      } catch (error) {
-        console.error('Error updating project name:', error);
-      }
-     });
-  });
 
 
 

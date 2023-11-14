@@ -9,6 +9,10 @@ class Item(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="project", null=True)
     name = models.CharField(max_length=100)
+    text = models.TextField(default="Write about this project")
+    goals = models.TextField(default="Write about the goals of this project")
+    approach = models.TextField(default="")
+    topic = models.TextField(default="")
 
     def __str__(self):
         return self.name
