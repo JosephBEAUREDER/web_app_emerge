@@ -18,3 +18,5 @@ The idea is that :
 * 5 - this file aims at capturing the meta-motivation the user has, to learn a specific topic
 * 6 - I believe that such a file (which can be pure text), plays a essential role in the process of learning, because it is highly personalized
 
+
+I am currently trying different kind of architectures (LocalLLM, OpenAI API, Tree Of Thoughts, LangChain...) and working on Javascript/CSS UI features
