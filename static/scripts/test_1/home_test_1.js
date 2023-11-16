@@ -1,5 +1,23 @@
 showProjects();
 
+
+async function showTopics() {
+    const requete = { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const response = await fetch('show_all_topics', requete)
+
+    const data = await response.json();
+
+    console.log(data)
+}
+
+
+
 async function showProjects() {
 
     const requete = { 
@@ -9,16 +27,30 @@ async function showProjects() {
         }
     };
 
-    const response = await fetch('/show_all_projects', requete)
+
+    const response = await fetch('show_all_projects', requete)
 
     const data = await response.json();
 
-    console.log(data['projects'])
+    console.log(data)
+
 
     var projectsDiv = document.getElementById('all-projects');
     projectsDiv.innerHTML = "";
 
+    let bubbles = '';
+    data['topics'].forEach(topic => {
+        var topicBubble = `<div class='color-bubble' style='background-color:${topic.color}'></div>`;
+        bubbles += topicBubble;
+    });
+
+    console.log(bubbles); // Log the bubbles variable
+
+    let projectRows = '';
     data['projects'].forEach((project) => {
+    
+        console.log(project.color);
+
         var projectRow = `
         <tr class="table-primary">
             <th scope="row">
@@ -26,14 +58,40 @@ async function showProjects() {
             </th>
             <td>${project.id}</td>
             <td>
-            <button type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="<div class='color-bubble'></div>" data-bs-original-title="Popover Title" aria-describedby="popover590883">Top</button>    </td>
-            
-        </tr>
+
+
+            <details data-popover="up">
+
+                <summary> 
+                    <div class='color-bubble' style='background-color:${project.color}'></div> 
+                </summary>
+
+                <div class="popover-wrapper">
+                <div class="popover-title"> Here are your topics </div>
+
+                    <div class="popover-content">
+                        <div class="bubble-wrapper">
+                            <div class='bubble-row'>
+                                ${bubbles}
+
+                                <div class='color-bubble plus-bubble'>+</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='bubble-row'></div> <!-- Extra row -->
+
+                </div>
+          </details>
+
+        </td>
+    </tr>
         `;
         projectsDiv.innerHTML += projectRow;
     });
-    initializePopovers();
+    
+
 }
+
 
 async function create_project() {
     const requete = { 
@@ -50,16 +108,16 @@ async function create_project() {
 
   }
 
+  function testbutton() {
+    console.log("test");
+  }
 
 
 
 
 
-  function initializePopovers() {
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-}
+
+
+
 
 
